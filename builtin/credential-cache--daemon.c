@@ -237,6 +237,9 @@ static void serve_cache(const char *socket_path, int debug)
 	if (fd < 0)
 		die_errno("unable to bind to '%s'", socket_path);
 
+	/* Ensure the socket file is only readable/writable by the owner. */
+	if (chmod(socket_path, 0600) < 0)
+		die_errno("unable to set permissions on '%s'", socket_path);
 	printf("ok\n");
 	fclose(stdout);
 	if (!debug) {
@@ -309,7 +312,7 @@ int cmd_credential_cache_daemon(int argc,
 
 	repo_config_get_bool(the_repository, "credentialcache.ignoresighup", &ignore_sighup);
 
-	argc = parse_options(argc, argv, prefix, options, usage, 0);
+	parse_options(argc, argv, prefix, options, usage, 0);
 	socket_path = argv[0];
 
 	if (!have_unix_sockets())
