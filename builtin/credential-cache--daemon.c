@@ -312,7 +312,7 @@ int cmd_credential_cache_daemon(int argc,
 
 	repo_config_get_bool(the_repository, "credentialcache.ignoresighup", &ignore_sighup);
 
-	parse_options(argc, argv, prefix, options, usage, 0);
+	argc = parse_options(argc, argv, prefix, options, usage, 0);
 	socket_path = argv[0];
 
 	if (!have_unix_sockets())
